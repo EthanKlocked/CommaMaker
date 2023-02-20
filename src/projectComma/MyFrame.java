@@ -36,7 +36,7 @@ public class MyFrame extends JFrame {
         UIManager.put("TextField.font", new Font("Helvetica", Font.PLAIN, 12));
 
         // global UI
-        JCheckBox checkBox = new JCheckBox("Auto Copy");
+        JCheckBox checkBox = new JCheckBox("AutoCopy");
         
         // create input and result fields
         JLabel inputLabel = new JLabel("Input    :");
