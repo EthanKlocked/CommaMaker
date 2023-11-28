@@ -21,7 +21,7 @@ import javax.swing.plaf.ColorUIResource;
 public class MyFrame extends JFrame {
     public MyFrame() {
     	// title
-    	setTitle("CommaMaker");
+    	setTitle("TextTransformer");
     	
         // set UIManager properties for customizing look and feel
         UIManager.put("Label.background", new Color(57, 137, 186));
@@ -37,6 +37,25 @@ public class MyFrame extends JFrame {
 
         // global UI
         JCheckBox checkBox = new JCheckBox("AutoCopy");
+        
+        // create labels and fields for custom letter replacement
+        JLabel fromLabel = new JLabel("from ");
+        fromLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JTextField fromField = new JTextField(5);
+        fromField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        fromField.setPreferredSize(new Dimension(80, fromField.getPreferredSize().height)); 
+        fromField.setMaximumSize(new Dimension(80, fromField.getPreferredSize().height));
+        fromField.setBackground(Color.WHITE);
+        fromField.setText(" ");
+        
+        JLabel toLabel = new JLabel(" to");
+        toLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JTextField toField = new JTextField(5);
+        toField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        toField.setPreferredSize(new Dimension(80, toField.getPreferredSize().height)); 
+        toField.setMaximumSize(new Dimension(80, toField.getPreferredSize().height));
+        toField.setBackground(Color.WHITE);
+        toField.setText(",");
         
         // create input and result fields
         JLabel inputLabel = new JLabel("Input    :");
@@ -69,9 +88,11 @@ public class MyFrame extends JFrame {
         
         // add action listeners to buttons
         submitButton.addActionListener(e -> {
+            String replaceFrom = fromField.getText();
+            String replaceTo = toField.getText();        	
             String result = inputField.getText();
-            String replacedResult = result.replace(' ', ',');
-            if(replacedResult.charAt(replacedResult.length() - 1) == ',') replacedResult = replacedResult.substring(0, replacedResult.length() - 1);
+            String replacedResult = result.replace(replaceFrom, replaceTo);
+            //if(replacedResult.charAt(replacedResult.length() - 1) == ',') replacedResult = replacedResult.substring(0, replacedResult.length() - 1);
             resultField.setText(replacedResult);
             if (checkBox.isSelected()) Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(replacedResult), null);                
         });
@@ -84,8 +105,19 @@ public class MyFrame extends JFrame {
         clearButton.addActionListener(e -> {
         	inputField.setText("");
         	resultField.setText("");
+        	fromField.setText("");
+        	toField.setText("");
         });        
 
+        // create replace panel with label, field
+        JPanel replacePanel = new JPanel();
+        replacePanel.setLayout(new BoxLayout(replacePanel, BoxLayout.X_AXIS));
+        replacePanel.add(fromLabel);
+        replacePanel.add(fromField);
+        replacePanel.add(toLabel);
+        replacePanel.add(toField);
+        replacePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
+        
         // create input panel with label, field, and button
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
@@ -117,6 +149,8 @@ public class MyFrame extends JFrame {
         // create main panel with input, result, and button panels
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        panel.add(replacePanel);        
         panel.add(Box.createRigidArea(new Dimension(0, 10))); // add some vertical spacing
         panel.add(inputPanel);
         panel.add(Box.createRigidArea(new Dimension(0, 10))); // add some vertical spacing
